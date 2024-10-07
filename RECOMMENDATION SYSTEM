@@ -1,0 +1,24 @@
+import numpy as np
+
+# Example user-item rating matrix
+ratings = np.array([[5, 3, 0, 1],
+                    [4, 0, 0, 1],
+                    [0, 2, 5, 0],
+                    [1, 0, 4, 4]])
+
+# Calculate user similarity (cosine similarity)
+from sklearn.metrics.pairwise import cosine_similarity
+
+similarity_matrix = cosine_similarity(ratings)
+print(similarity_matrix)
+
+# Get recommendations for User 1
+def get_recommendations(user_index, ratings, similarity_matrix):
+    similar_users = similarity_matrix[user_index]
+    # Get weighted ratings from similar users
+    weighted_ratings = np.dot(similar_users, ratings) / np.sum(similar_users)
+    recommendations = np.argsort(weighted_ratings)[::-1]  # Sort items by score
+    return recommendations
+
+recommended_items = get_recommendations(0, ratings, similarity_matrix)
+print("Recommended items for User 1:", recommended_items)
